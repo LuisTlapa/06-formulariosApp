@@ -23,19 +23,49 @@ export class RegistroComponent implements OnInit {
     validators:[this.validatorService.camposIguales('password', 'confirmpassword')]
   })
 
+  //emailError:string = ''
+  get emailError():string{
+    const errors = this.miFormulario.get('email')?.errors
+    if(errors?.required){
+      return 'Email es obligatorio'
+    }else if (errors?.pattern){
+      return 'El valor ingresado no tiene formato de correo'
+    }else if(errors?.emailTomado){
+      return 'El valor ya esta registrado'
+
+    }
+    return ''
+  }
+
   constructor(private fb: FormBuilder, private validatorService: ValidatorService, private emailValidator:EmailValidatorsService) { }
 
   ngOnInit(): void {
     this.miFormulario.reset({
       nombre:'Luis Tlapa',
       email:'tlapapollo@gmail.com',
-      username:'LuisTlapa'
+      username:'LuisTlapa',
+      password: '123456',
+      confirmpassword:'123456'
     })
   }
 
   campoNoValido(campo:string){
     return this.miFormulario.get(campo)?.invalid && this.miFormulario.get(campo)?.touched;
   }
+  /*emailRequired(){
+    return this.miFormulario.get('email')?.errors?.required && this.miFormulario.get('email')?.touched;
+
+  }
+  emailformat(){
+    return this.miFormulario.get('email')?.errors?.pattern && this.miFormulario.get('email')?.touched;
+
+  }
+  emailTomado(){
+    return this.miFormulario.get('email')?.errors?.emailTomado && this.miFormulario.get('email')?.touched;
+
+  }*/
+
+
 
   submitFormulario(){
     console.log(this.miFormulario.value);
